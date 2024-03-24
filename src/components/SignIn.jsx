@@ -1,7 +1,9 @@
 import { TextInput, Pressable, View, StyleSheet } from "react-native";
+import { useNavigate } from "react-router-native";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+import useSignIn from "../hooks/useSignIn";
 import theme from "../theme";
 import Text from "./Text";
 
@@ -43,11 +45,7 @@ const validationSchema = yup.object().shape({
 
 const initialValues = { username: "", password: "" };
 
-const onSubmit = (values) => {
-  console.log(values);
-};
-
-const SignIn = () => {
+const SingInForm = ({ onSubmit }) => {
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   const isUsernameError = formik.touched.username && formik.errors.username;
   const isPasswordError = formik.touched.password && formik.errors.password;
@@ -84,6 +82,19 @@ const SignIn = () => {
       </Pressable>
     </View>
   );
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values) => {
+    const { username, password } = values;
+    await signIn({ username, password });
+    navigate("/repositories");
+  };
+
+  return <SingInForm onSubmit={handleSubmit} />;
 };
 
 export default SignIn;
