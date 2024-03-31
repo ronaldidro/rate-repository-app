@@ -10,18 +10,14 @@ import useAuthStorage from "../hooks/useAuthStorage";
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: theme.backgroundColors.appBar,
-  },
-  text: {
-    color: "white",
-    fontSize: 18,
+    backgroundColor: theme.colors.appBarBackground,
   },
 });
 
-const AppBarTab = ({ label, style, path, handlePress }) => {
+const AppBarTab = ({ label, path, handlePress }) => {
   const content = (
-    <View style={style}>
-      <Text fontWeight="bold" style={styles.text}>
+    <View style={{ padding: 15 }}>
+      <Text fontWeight="bold" style={{ color: "white", fontSize: 18 }}>
         {label}
       </Text>
     </View>
@@ -47,18 +43,19 @@ const AppBar = ({ isSigned }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal style={{ padding: 20 }}>
+      <ScrollView horizontal>
+        <AppBarTab path="/" label="Repositories" />
         {isSigned ? (
           <>
-            <AppBarTab
-              label="Repositories"
-              path="/repositories"
-              style={{ paddingRight: 20 }}
-            />
+            <AppBarTab path="/create-review" label="Create a review" />
+            <AppBarTab path="/reviews" label="My reviews" />
             <AppBarTab label="Sign out" handlePress={logout} />
           </>
         ) : (
-          <AppBarTab label="Sign in" path="/" />
+          <>
+            <AppBarTab path="/sign-up" label="Sign up" />
+            <AppBarTab path="/sign-in" label="Sign in" />
+          </>
         )}
       </ScrollView>
     </View>

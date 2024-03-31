@@ -1,7 +1,10 @@
 import { Image, StyleSheet, View } from "react-native";
+import * as Linking from "expo-linking";
+
 import Text from "./Text";
-import theme from "../theme";
 import StatItem from "./StatItem";
+import theme from "../theme";
+import Button from "./Button";
 
 const styles = StyleSheet.create({
   container: {
@@ -45,18 +48,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const RepositoryItem = ({
-  ownerAvatarUrl,
-  fullName,
-  description,
-  language,
-  stargazersCount,
-  forksCount,
-  reviewCount,
-  ratingAverage,
-}) => {
+const RepositoryItem = ({ repository, showButton = false }) => {
+  const {
+    ownerAvatarUrl,
+    fullName,
+    description,
+    language,
+    stargazersCount,
+    forksCount,
+    reviewCount,
+    ratingAverage,
+    url,
+  } = repository;
+
   return (
-    <View style={styles.container}>
+    <View testID="repositoryItem" style={styles.container}>
       <View style={styles.profile}>
         <Image style={styles.image} source={{ uri: ownerAvatarUrl }} />
         <View style={styles.content}>
@@ -73,6 +79,14 @@ const RepositoryItem = ({
         <StatItem value={reviewCount} label="Reviews" />
         <StatItem value={ratingAverage} label="Rating" />
       </View>
+      {showButton && (
+        <Button
+          style={{ marginTop: 10 }}
+          handlePress={() => Linking.openURL(url)}
+        >
+          Open in Github
+        </Button>
+      )}
     </View>
   );
 };

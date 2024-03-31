@@ -1,12 +1,15 @@
 import { StyleSheet, View } from "react-native";
 import { Route, Routes, Navigate } from "react-router-native";
-import { useQuery } from "@apollo/client";
 
-import RepositoryList from "./RepositoryList";
 import AppBar from "./AppBar";
+import CreateReview from "./CreateReview";
+import RepositoryList from "./RepositoryList";
+import Reviews from "./Reviews";
 import SignIn from "./SignIn";
-import { GET_CURRENT_USER } from "../graphql/queries";
+import SignUp from "./SignUp";
+import SingleRepository from "./SingleRepository";
 import theme from "../theme";
+import useMe from "../hooks/useMe";
 
 const styles = StyleSheet.create({
   container: {
@@ -17,17 +20,21 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
-  const { loading, data } = useQuery(GET_CURRENT_USER);
+  const { loading, user } = useMe();
 
   if (loading) return null;
 
   return (
     <View style={styles.container}>
-      <AppBar isSigned={data.me?.username} />
+      <AppBar isSigned={user?.username} />
       <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/repositories" element={<RepositoryList />} />
-        <Route path="*" element={<Navigate to="/repositories" replace />} />
+        <Route path="/" element={<RepositoryList />} />
+        <Route path="/:id" element={<SingleRepository />} />
+        <Route path="/create-review" element={<CreateReview />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </View>
   );
